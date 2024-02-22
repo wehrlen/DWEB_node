@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NodeJS</title>
+</head>
+
+<body>
+    <input type="number" name="first">
+    <select name="operation">
+        <option value="plus">+</option>
+        <option value="minus">-</option>
+        <option value="times">*</option>
+        <option value="by">/</option>
+    </select>
+    <input type="number" name="second">
+    <button type="button">Calculate</button>
+
+    <br>
+
+    <span id="result"></span>
+
+    <script>
+        window.addEventListener("load", () => {
+            document.querySelector("button").addEventListener("click", () => {
+                let first = document.querySelector("[name=first]").value;
+                let second = document.querySelector("[name=second]").value;
+                let operation = document.querySelector("[name=operation]").value;
+                fetch("/api/calc", {
+                        body: JSON.stringify({
+                            first: first,
+                            operation: operation,
+                            second: second
+                        }),
+                        method: "POST"
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        document.getElementById("result").innerText = "Result: " + data;
+                    })
+            })
+        })
+    </script>
+</body>
+
+</html>

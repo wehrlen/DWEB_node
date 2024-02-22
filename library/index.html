@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+</head>
+
+<body>
+    <span id="books"></span>
+
+    <form action="/api/books" method="POST">
+        <label for="title">Title:</label>
+        <br>
+        <input type="text" name="title">
+        <br>
+        <label for="description">Description:</label>
+        <br>
+        <textarea name="description" cols="30" rows="10"></textarea>
+        <br>
+        <button type="submit">Add book</button>
+    </form>
+
+    <script>
+        window.addEventListener("load", () => {
+            fetch("/api/books")
+                .then((response) => response.json())
+                .then((data) => {
+                    data.forEach((book, i) => {
+                        let text = document.createElement("p");
+                        text.innerHTML = "<a href='/book/" + i + "'>" + book.title + " > '" + book.description + "'</a>";
+                        document.getElementById("books").appendChild(text);
+                    });
+                });
+
+            let form = document.querySelector("form");
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                // Get form entries as Object
+                const data = new FormData(e.target);
+                const book = Object.fromEntries(data.entries());
+
+                fetch("/api/books", {
+                    body: JSON.stringify(book),
+                    method: form.method
+                });
+
+                let text = document.createElement("p");
+                text.innerText = book.title + " > '" + book.description + "'";
+                document.getElementById("books").appendChild(text);
+            });
+        });
+    </script>
+</body>
+
+</html>

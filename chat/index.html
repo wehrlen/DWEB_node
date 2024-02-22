@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+
+<body>
+    <div x-data="chat">
+        <input type="text" placeholder="Message" x-model="message" @keyup.enter="post()">
+        <template x-for="msg in messages">
+            <p x-text="msg"></p>
+        </template>
+    </div>
+
+    <script defer src="https://unpkg.com/alpinejs"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = new io();
+
+        // socket.on("welcome", (data) => {
+        //     console.log(data);
+        // })
+
+        // socket.on("message", (data) => {
+        //     console.log(data);
+        // })
+
+        // socket.emit("message", "Hey!")
+
+        function chat() {
+            return {
+                messages: [],
+                message: "",
+
+                init() {
+                    socket.on("message", (data) => this.messages.push(data));
+                },
+
+                post() {
+                    socket.emit("message", this.message);
+                    this.message = "";
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

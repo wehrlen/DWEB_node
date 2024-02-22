@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+</head>
+
+<body>
+    <span id="book"></span>
+
+    <script>
+        window.addEventListener("load", () => {
+            let url = window.location.href.split("/");
+            let id = url[url.length - 1];
+
+            fetch("/api/book/" + id)
+                .then((response) => response.json())
+                .then((book) => {
+                    let text = document.createElement("p");
+                    text.innerText = "ID: " + id;
+                    document.getElementById("book").appendChild(text);
+                    text = document.createElement("p");
+                    text.innerText = "Title: " + book.title;
+                    document.getElementById("book").appendChild(text);
+                    text = document.createElement("p");
+                    text.innerText = "Description: " + book.description;
+                    document.getElementById("book").appendChild(text);
+                })
+        })
+    </script>
+</body>
+
+</html>
